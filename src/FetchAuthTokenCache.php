@@ -92,9 +92,8 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface
             $httpHandler = $this->httpHandler;
         }
 
-        \QMetric::startNonoverlappingBenchmark('spanner.app_time.oauth_token');
+        \QMetric::increment('spanner.app_time.oauth_token.count');
         $auth_token = $this->fetcher->fetchAuthToken($httpHandler);
-        \QMetric::endNonoverlappingBenchmark('spanner.app_time.oauth_token');
 
         if (isset($auth_token['access_token'])) {
             $this->setCachedValue($cacheKey, $auth_token['access_token']);
