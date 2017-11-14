@@ -78,9 +78,6 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface
     {
         // Use the cached value if its available.
         //
-        // TODO: correct caching; update the call to setCachedValue to set the expiry
-        // to the value returned with the auth token.
-        //
         // TODO: correct caching; enable the cache to be cleared.
         $cacheKey = $this->fetcher->getCacheKey();
         $cached = $this->getCachedValue($cacheKey);
@@ -96,7 +93,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface
         $auth_token = $this->fetcher->fetchAuthToken($httpHandler);
 
         if (isset($auth_token['access_token'])) {
-            $this->setCachedValue($cacheKey, $auth_token['access_token']);
+            $this->setCachedValue($cacheKey, $auth_token['access_token'], $auth_token['expires_in']);
         }
 
         return $auth_token;

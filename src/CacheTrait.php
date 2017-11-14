@@ -45,7 +45,7 @@ trait CacheTrait
     /**
      * Saves the value in the cache when that is available.
      */
-    private function setCachedValue($k, $v)
+    private function setCachedValue($k, $v, $expiry=null)
     {
         if (is_null($this->cache)) {
             return;
@@ -58,7 +58,13 @@ trait CacheTrait
 
         $cacheItem = $this->cache->getItem($key);
         $cacheItem->set($v);
-        $cacheItem->expiresAfter($this->cacheConfig['lifetime']);
+        if ($expiry !== null) {
+            \QMetric::increment('spanner.app_time.oauth_token.set_cached_value.count_expiry');
+            $cacheItem->expiresAfter($expiry);
+        } else {
+            \QMetric::increment('spanner.app_time.oauth_token.set_cached_value.count_lifetime');
+            $cacheItem->expiresAfter($this->cacheConfig['lifetime']);
+        }
         return $this->cache->save($cacheItem);
     }
 
