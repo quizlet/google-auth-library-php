@@ -61,7 +61,9 @@ trait CacheTrait
         if ($expiry !== null) {
             \QMetric::increment('spanner.app_time.oauth_token.set_cached_value.count_expiry');
             // Spread the renewal out between 65 seconds before and 600 seconds before it will actually expire
-            $cacheItem->expiresAfter($expiry - mt_rand(65, 600));
+            $spreadExpiry = $expiry - mt_rand(65, 600);
+            \QMetric::gauge('spanner.app_time.oauth_token.set_cached_value.value', $spreadExpiry);
+            $cacheItem->expiresAfter($spreadExpiry);
         } else {
             \QMetric::increment('spanner.app_time.oauth_token.set_cached_value.count_lifetime');
             $cacheItem->expiresAfter($this->cacheConfig['lifetime']);
