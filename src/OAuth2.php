@@ -34,7 +34,7 @@ use Psr\Http\Message\UriInterface;
  */
 class OAuth2 implements FetchAuthTokenInterface
 {
-    const DEFAULT_EXPIRY_SECONDS = 3600; // 1 hour
+    const DEFAULT_EXPIRY_SECONDS = 86400; // 1 hour
     const DEFAULT_SKEW_SECONDS = 60; // 1 minute
     const JWT_URN = 'urn:ietf:params:oauth:grant-type:jwt-bearer';
 
